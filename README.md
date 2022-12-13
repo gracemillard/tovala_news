@@ -22,13 +22,13 @@ I wasnt provided tovala s3 credentials and I really didnt want to use my persona
 ..... If I were to use it like this on the job, I would add some kind of retirement process to purge the staging area every once in awhile+
 
 I designed this with flexibility and scalability in mind.
-- Allowing every keyword used to be tracked and reused (via the keywords table)
+- Every keyword used to be tracked and reused (via the keywords table)
 
-- Allowing the user to delete all of the sored keywords if they want to start from scratch or ignore the stored keywords and just run their custom list (via the self titled comand line arguments)
+- The user to delete all of the sored keywords if they want to start from scratch or ignore the stored keywords and just run their custom list (via the self titled comand line arguments)
 
-- I also give the user several options for how the data can be injested. There is an append option (actually an upsert) to bring data in and make updates to existing data (if nessesary). A full-refresh option, if you want to get rid of everything in the old table and replace it with new data fresh from the api. And there is a refresh-range which is when you want to completly refresh the data within a certain daterange and keyword range. These last two options are good for when the data provider (in this case news-api) messes up and you need to backfill the database.
+- The user several options for how the data can be injested. There is an append option (actually an upsert) to bring data in and make updates to existing data (if nessesary). A full-refresh option, if you want to get rid of everything in the old table and replace it with new data fresh from the api. And there is a refresh-range which is when you want to completly refresh the data within a certain daterange and keyword range. These last two options are good for when the data provider (in this case news-api) messes up and you need to backfill the database.
 
--I also have the keywords getting chunked into smaller batches before they get processed, with the idea that you could horozontally scale this process by dropping the chunks into a q (like aws sqs) and have lambdas running the news_processor consuming those chunks in parellel. This would speed up the process quite a bit (I have more notes in the code abput how this would work)
+- The keywords getting chunked into smaller batches before they get processed, with the idea that you could horozontally scale this process by dropping the chunks into a q (like aws sqs) and have lambdas running the news_processor consuming those chunks in parellel. This would speed up the process quite a bit (I have more notes in the code abput how this would work)
 
 ## Considerations
 
