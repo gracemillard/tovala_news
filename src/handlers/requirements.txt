@@ -1,0 +1,7 @@
+pandas
+pytz
+numpy
+boto3
+sqlalchemy
+sqlalchemy_utils
+snowflake-sqlalchemy
