@@ -42,12 +42,20 @@ I designed this with flexibility and scalability in mind.
 - If I do parellelize these processes, I will have to keep track of all of their processing status' because I would like to run a process to create/update some tables with aggregate measures (or maybe refresh a materialized view), and I will need to create an event to kick off those downstream processes once I know all the keywords have been processed
 
 
-## The Deployment Plan
+## The Infra and Deployment Plan
 
-make a request to trigger lambda 
-or set up api gateway to receive api call and forward to lambda 
+1. Make a request to trigger news_handler.py-lambda, or set up api gateway to receive api call and forward to lambda 
 (depends on who the user is, and how the user wants to use the service)
-run news_handler.py in a lambda (triggered by api gateway or request) and register each batches chunks in a status table to indicate that they exist and are processing, handler blobs get fed to sqs q, lambdas running news_processor.py consume json blobs with the dates and keyword lists of the q when they have completed the write_to_db function the status of that blob/chunk will get updated to complete then a check will be made (in the processor file) to see if all of the chunks from that batch are done if the check is succesful then the catch number will be sent to another lambda which will run a diffent file (that I havnt written yet) containing the logic to upsert entries into a table of aggrgate measures. 
+
+2. Run news_handler.py in a lambda (triggered by api gateway or request) and register each batches chunks in a status table to indicate that they exist and are processing
+
+3. Json blobs from handler-lambda get fed to sqs q
+
+4. Lambdas running news_processor.py consume json blobs with the dates and keyword lists of the q 
+
+5. When the processor-lambdas have completed the write_to_db function the status of that blob/chunk will get updated to complete then a check will be made (in that same processor file) to see if all of the chunks from that batch are done
+
+6. If the check is succesful then the batch number will be sent to another lambda which will run a diffent file (that I havnt written yet) containing the logic to upsert entries into a table of aggrgate measures. 
 
 - I would configure this with a cdk script, should probally dockerize too 
 
